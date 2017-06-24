@@ -1,0 +1,958 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     39536,        950]
+NotebookOptionsPosition[     35908,        852]
+NotebookOutlinePosition[     36317,        869]
+CellTagsIndexPosition[     36274,        866]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["A Musical Keyboard", "Title",
+ CellChangeTimes->{{3.706523318346366*^9, 3.7065233195941553`*^9}, {
+  3.707250784686008*^9, 
+  3.707250788635667*^9}},ExpressionUUID->"9ed598d9-4f1f-4988-b709-\
+cefdcd309afb"],
+
+Cell["\<\
+The goal of this exploration is to create a dynamic and interactive musical \
+keyboard that leverages many of the great sounds one can produce in the \
+Wolfram Language.
+
+Follow the steps below and at the end you will have your self a nifty musical \
+tool!\
+\>", "Text",
+ CellChangeTimes->{{3.707250932615497*^9, 
+  3.707251018866781*^9}},ExpressionUUID->"fb9c684d-d325-4221-b47e-\
+e215324aae0c"],
+
+Cell[CellGroupData[{
+
+Cell["Creating The Keyboard", "Section",
+ CellChangeTimes->{{3.706523299570908*^9, 3.706523301946604*^9}, 
+   3.707250793563438*^9, {3.707251298750868*^9, 
+   3.707251307918488*^9}},ExpressionUUID->"9a7ce3b0-bc97-49a1-b711-\
+78a34727c9b2"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructKeyboard", "[", "nOctaves_Integer", "]"}], "/;", 
+    RowBox[{"nOctaves", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"whiteKeysInOctave", "=", "7"}], ",", 
+       RowBox[{"blackKeysInOctave", "=", "5"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Join", "[", 
+      RowBox[{
+       RowBox[{"constructWhiteKeys", "[", 
+        RowBox[{"whiteKeysInOctave", "*", "nOctaves"}], "]"}], ",", 
+       "\[IndentingNewLine]", "         ", 
+       RowBox[{"constructBlackKeys", "[", 
+        RowBox[{"blackKeysInOctave", "*", "nOctaves"}], "]"}]}], "]"}]}], 
+    "]"}]}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructWhiteKeys", "[", "nKeys_Integer", "]"}], "/;", 
+    RowBox[{"nKeys", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"whiteKeyxMinFunc", "=", "Identity"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"constructWhiteKey", "/@", 
+      RowBox[{"whiteKeyxMinFunc", "/@", 
+       RowBox[{"Range", "[", "nKeys", "]"}]}]}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructBlackKeys", "[", "nKeys_Integer", "]"}], "/;", 
+    RowBox[{"nKeys", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"blackKeyxMinFunc", "=", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"LinearRecurrence", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0", ",", "0", ",", "0", ",", "1", ",", 
+               RowBox[{"-", "1"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "2", ",", "4", ",", "5", ",", "6", ",", "8"}],
+               "}"}], ",", "#"}], "]"}], "[", 
+           RowBox[{"[", 
+            RowBox[{"-", "1"}], "]"}], "]"}], "+", ".75"}], ")"}], "&"}]}], 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"constructBlackKey", "/@", 
+      RowBox[{"blackKeyxMinFunc", "/@", 
+       RowBox[{"Range", "[", "nKeys", "]"}]}]}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructWhiteKey", "[", "xMin_", "]"}], "/;", 
+    RowBox[{"xMin", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"constructKey", "[", 
+    RowBox[{"White", ",", "xMin", ",", "0", ",", 
+     RowBox[{"xMin", "+", "1"}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructBlackKey", "[", "xMin_", "]"}], "/;", 
+    RowBox[{"xMin", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"constructKey", "[", 
+    RowBox[{"Black", ",", "xMin", ",", "2", ",", 
+     RowBox[{"xMin", "+", ".5"}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"constructKey", "[", 
+   RowBox[{"color_", ",", "xMin_", ",", "yMin_", ",", "xMax_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"EdgeForm", "[", "Thin", "]"}], ",", "color", ",", 
+    RowBox[{"Rectangle", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"xMin", ",", "yMin"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"xMax", ",", "4"}], "}"}]}], "]"}]}], "}"}]}]}], "Input",
+ CellChangeTimes->{{3.7060306710422783`*^9, 3.706030692226204*^9}, {
+  3.706030752311799*^9, 3.706030753554358*^9}, {3.706118786349497*^9, 
+  3.706118798040262*^9}, {3.706146258250793*^9, 3.7061462593816967`*^9}, {
+  3.706146290226083*^9, 3.706146291600486*^9}, {3.706146422045369*^9, 
+  3.706146423054652*^9}, {3.706177174883754*^9, 3.706177187350318*^9}, {
+  3.706316955486246*^9, 3.7063170163824387`*^9}, {3.706357769217877*^9, 
+  3.706357797028042*^9}, {3.706523516531352*^9, 3.7065235805203342`*^9}, {
+  3.70652362745065*^9, 3.7065236364666433`*^9}, {3.706524255083535*^9, 
+  3.7065243181309013`*^9}},ExpressionUUID->"b5e4c031-a28a-432a-82e0-\
+391edbe95d7a"],
+
+Cell[CellGroupData[{
+
+Cell["Manipulation Test", "Subsection",
+ CellChangeTimes->{{3.706184540528845*^9, 3.7061845440868263`*^9}, {
+  3.7072510278262653`*^9, 
+  3.707251031696602*^9}},ExpressionUUID->"1c0b13cf-54b5-45f9-bf16-\
+e19677255173"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Graphics", "[", 
+     RowBox[{
+      RowBox[{"constructKeyboard", "[", "nOctaves", "]"}], ",", 
+      RowBox[{"ImageSize", "\[Rule]", "Full"}]}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"nOctaves", ",", "3", ",", "\"\<Number Of Octaves\>\""}], 
+       "}"}], ",", 
+      RowBox[{"Range", "[", "7", "]"}]}], "}"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.7061188686284323`*^9, 3.706118875085532*^9}, {
+   3.706146488981831*^9, 3.70614650139914*^9}, {3.706177712330147*^9, 
+   3.7061777271974993`*^9}, {3.706184547208517*^9, 3.7061846101630793`*^9}, 
+   3.706184644081531*^9, {3.706317023078083*^9, 3.7063170680585127`*^9}, {
+   3.706317142787959*^9, 3.7063171886791153`*^9}, {3.7063172282379217`*^9, 
+   3.7063172720883913`*^9}, 3.706317309306245*^9, {3.706523585666031*^9, 
+   3.7065236139596577`*^9}, 
+   3.7065236583141127`*^9},ExpressionUUID->"fb23e546-176d-4a0d-925b-\
+b4429800798e"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Creating The Keyboard Labels", "Section",
+ CellChangeTimes->{{3.706523343673955*^9, 3.706523353481843*^9}, {
+  3.706524199190448*^9, 3.7065242006668386`*^9}, {3.707250801540654*^9, 
+  3.707250808867834*^9}},ExpressionUUID->"4f28462f-ae39-4a75-a8c7-\
+9bd36431463d"],
+
+Cell["\<\
+A label is the scientific pitch notation for each key in the constructed \
+keyboard. 
+For example, \[OpenCurlyDoubleQuote]C4\[CloseCurlyDoubleQuote], \
+\[OpenCurlyDoubleQuote]C#4\[CloseCurlyDoubleQuote], \[OpenCurlyDoubleQuote]E3\
+\[CloseCurlyDoubleQuote] ...\
+\>", "Text",
+ CellChangeTimes->{{3.706523901242749*^9, 3.706523971080592*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"constructLabels", "[", "keyboard_List", "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"nOctaves", "=", 
+       RowBox[{
+        RowBox[{"Length", "[", "keyboard", "]"}], "/", "12"}]}], "}"}], ",", 
+     RowBox[{"Join", "[", 
+      RowBox[{
+       RowBox[{"constructWhiteLabels", "[", "nOctaves", "]"}], ",", 
+       RowBox[{"constructBlackLabels", "[", "nOctaves", "]"}]}], "]"}]}], 
+    "]"}]}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructWhiteLabels", "[", "nOctaves_Integer", "]"}], "/;", 
+    RowBox[{"nOctaves", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"chars", "=", 
+       RowBox[{"RotateLeft", "[", 
+        RowBox[{
+         RowBox[{"CharacterRange", "[", 
+          RowBox[{"\"\<A\>\"", ",", "\"\<G\>\""}], "]"}], ",", "2"}], "]"}]}],
+       "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Thread", "[", 
+         RowBox[{"constructWhiteLabel", "[", 
+          RowBox[{"chars", ",", "#"}], "]"}], "]"}], "&"}], "/@", 
+       RowBox[{"octaveRange", "[", "nOctaves", "]"}]}], "]"}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"constructBlackLabels", "[", "nOctaves_Integer", "]"}], "/;", 
+    RowBox[{"nOctaves", ">", "0"}]}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"chars", "=", 
+       RowBox[{"Delete", "[", 
+        RowBox[{
+         RowBox[{"RotateLeft", "[", 
+          RowBox[{
+           RowBox[{"CharacterRange", "[", 
+            RowBox[{"\"\<A\>\"", ",", "\"\<G\>\""}], "]"}], ",", "2"}], "]"}],
+          ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", "3", "}"}], ",", 
+           RowBox[{"{", "7", "}"}]}], "}"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Thread", "[", 
+         RowBox[{"constructBlackLabel", "[", 
+          RowBox[{"chars", ",", "#"}], "]"}], "]"}], "&"}], "/@", 
+       RowBox[{"octaveRange", "[", "nOctaves", "]"}]}], "]"}]}], "]"}]}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"constructWhiteLabel", "[", 
+    RowBox[{"pitch_String", ",", "octNum_Integer"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"pitch", "~~", 
+    RowBox[{"ToString", "[", "octNum", "]"}]}]}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"constructBlackLabel", "[", 
+    RowBox[{"pitch_String", ",", "octNum_Integer"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"pitch", "~~", "\"\<#\>\"", "~~", 
+    RowBox[{"ToString", "[", "octNum", "]"}]}]}], 
+  "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"octaveRange", "[", "1", "]"}], ":=", 
+   RowBox[{"{", "4", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"octaveRange", "[", 
+    RowBox[{"n_", "?", "EvenQ"}], "]"}], ":=", 
+   RowBox[{"Prepend", "[", 
+    RowBox[{
+     RowBox[{"octaveRange", "[", 
+      RowBox[{"n", "-", "1"}], "]"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"octaveRange", "[", 
+        RowBox[{"n", "-", "1"}], "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "-", "1"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"octaveRange", "[", 
+    RowBox[{"n_", "?", "OddQ"}], "]"}], ":=", 
+   RowBox[{"Append", "[", 
+    RowBox[{
+     RowBox[{"octaveRange", "[", 
+      RowBox[{"n", "-", "1"}], "]"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"octaveRange", "[", 
+        RowBox[{"n", "-", "1"}], "]"}], "[", 
+       RowBox[{"[", 
+        RowBox[{"-", "1"}], "]"}], "]"}], "+", "1"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.706376351942477*^9, 3.706376407268427*^9}, {
+   3.7063769506458817`*^9, 3.706376960007111*^9}, {3.7064822311410503`*^9, 
+   3.706482241123179*^9}, {3.706482475650009*^9, 3.7064824814950523`*^9}, {
+   3.706523786487092*^9, 3.706523797334608*^9}, {3.7065238386862593`*^9, 
+   3.706523852374682*^9}, {3.7065239923314857`*^9, 3.7065240365990267`*^9}, {
+   3.706524070209423*^9, 3.7065240791612587`*^9}, {3.706524137954414*^9, 
+   3.706524153389822*^9}, {3.706524506249473*^9, 3.7065246064726763`*^9}, {
+   3.706524666547768*^9, 3.706524675811557*^9}, {3.7065247296272287`*^9, 
+   3.706524750033423*^9}, 3.70652611214183*^9, {3.706526289222842*^9, 
+   3.706526341908317*^9}, {3.7065267267168818`*^9, 3.706526729924878*^9}, {
+   3.706526896522951*^9, 3.706526905405748*^9}, {3.7065270116542177`*^9, 
+   3.706527017478064*^9}, 3.706527075650334*^9, {3.7065335691345987`*^9, 
+   3.706533610133066*^9}},ExpressionUUID->"e788b66e-8c14-4a64-b852-\
+65102619d3a1"],
+
+Cell[CellGroupData[{
+
+Cell["Manipulation Test", "Subsubsection",
+ CellChangeTimes->{{3.70652709582143*^9, 3.7065271015908203`*^9}, {
+  3.707251034293782*^9, 
+  3.707251034993671*^9}},ExpressionUUID->"78a1ad6f-3db2-4103-b6ad-\
+9e7b37f907ba"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"constructLabels", "[", 
+     RowBox[{"constructKeyboard", "[", "nOctaves", "]"}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"nOctaves", ",", "3", ",", "\"\<Number Of Octaves\>\""}], 
+       "}"}], ",", 
+      RowBox[{"Range", "[", "7", "]"}]}], "}"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.7061188686284323`*^9, 3.706118875085532*^9}, {
+   3.706146488981831*^9, 3.70614650139914*^9}, {3.706177712330147*^9, 
+   3.7061777271974993`*^9}, {3.706184547208517*^9, 3.7061846101630793`*^9}, 
+   3.706184644081531*^9, {3.706317023078083*^9, 3.7063170680585127`*^9}, {
+   3.706317142787959*^9, 3.7063171886791153`*^9}, {3.7063172282379217`*^9, 
+   3.7063172720883913`*^9}, 3.706317309306245*^9, {3.706523585666031*^9, 
+   3.7065236139596577`*^9}, 3.7065236583141127`*^9, {3.70652714518114*^9, 
+   3.7065271924037046`*^9}, {3.706533634043723*^9, 3.706533654051024*^9}, {
+   3.7065590922438087`*^9, 3.7065591254749117`*^9}, {3.706603613583177*^9, 
+   3.706603614715773*^9}, {3.707250845113515*^9, 
+   3.707250856523942*^9}},ExpressionUUID->"0f64be88-8754-40de-a65e-\
+990ece0e9def"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["A Dynamic Transformation Of The Keyboard", "Section",
+ CellChangeTimes->{{3.706523304946431*^9, 3.706523308530333*^9}, {
+  3.707251347748279*^9, 
+  3.707251376764855*^9}},ExpressionUUID->"4ece6db4-97e2-402c-ba4b-\
+2ff8d728719f"],
+
+Cell[CellGroupData[{
+
+Cell["Making The Keyboard Playable", "Subsection",
+ CellChangeTimes->{{3.7065233631376143`*^9, 3.706523369281334*^9}, {
+  3.707251047681094*^9, 
+  3.707251053576859*^9}},ExpressionUUID->"681a920d-318b-465b-81f4-\
+912d4c352c71"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"makeKeyboardPlayable", "[", 
+   RowBox[{"keyboard_", ",", "labeledQ_", ",", "instrument_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"makeKeyboardAudible", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"makeKeyboardPressable", "[", "\[IndentingNewLine]", 
+     RowBox[{"makeKeyboardTouchable", "[", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{"labeledQ", ",", 
+        RowBox[{"makeKeyboardLabelable", "[", "keyboard", "]"}], ",", 
+        "keyboard"}], "]"}], "]"}], "]"}], ",", "\[IndentingNewLine]", 
+    "instrument"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7065569580442953`*^9, 3.706556968202045*^9}, {
+  3.7065591505794773`*^9, 3.706559157216732*^9}, {3.707250874899666*^9, 
+  3.707250886944059*^9}},ExpressionUUID->"e8b9d81d-e94e-4927-84c8-\
+5e62df77bfa8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Making The Keyboard Audible", "Subsection",
+ CellChangeTimes->{{3.707251058854877*^9, 
+  3.7072510656164827`*^9}},ExpressionUUID->"39a5c4a2-7724-4696-8b8a-\
+1d8247d811ad"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeKeyboardAudible", "[", 
+    RowBox[{"keyboard_List", ",", "instrument_String"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"MapThread", "[", 
+    RowBox[{"makeKeyAudible", ",", 
+     RowBox[{"{", 
+      RowBox[{"keyboard", ",", 
+       RowBox[{"constructLabels", "[", "keyboard", "]"}], ",", 
+       RowBox[{"ConstantArray", "[", 
+        RowBox[{"instrument", ",", 
+         RowBox[{"Length", "[", "keyboard", "]"}]}], "]"}]}], "}"}]}], 
+    "]"}]}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"makeKeyAudible", "[", 
+   RowBox[{
+   "pressedKey_DynamicModule", ",", "label_String", ",", 
+    "instrument_String"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"EventHandler", "[", "\[IndentingNewLine]", 
+   RowBox[{"pressedKey", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<MouseDown\>\"", "\[RuleDelayed]", " ", 
+     RowBox[{"EmitSound", "[", 
+      RowBox[{"Sound", "[", 
+       RowBox[{"SoundNote", "[", 
+        RowBox[{"label", ",", "1", ",", "instrument"}], "]"}], "]"}], 
+      "]"}]}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.70653309952654*^9, 3.706533159749751*^9}, {
+   3.7065331906439047`*^9, 3.706533204723819*^9}, {3.706533261452512*^9, 
+   3.706533288186569*^9}, {3.706533325144479*^9, 3.706533328896381*^9}, {
+   3.706533363168367*^9, 3.7065333672724648`*^9}, {3.706533839392627*^9, 
+   3.7065338426223173`*^9}, {3.7065338826944532`*^9, 
+   3.7065338833240623`*^9}, {3.7065341047759247`*^9, 3.706534112656476*^9}, {
+   3.706534512099145*^9, 3.706534522473531*^9}, {3.7065346724944677`*^9, 
+   3.706534719686247*^9}, {3.7065471691542683`*^9, 3.706547169872162*^9}, {
+   3.706547209730199*^9, 3.706547212671116*^9}, 
+   3.706551753454084*^9},ExpressionUUID->"9f08893f-9e7b-4697-98bb-\
+6b29180f5898"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Making The Keyboard Pressable", "Subsection",
+ CellChangeTimes->{{3.7072510701787367`*^9, 
+  3.707251080119557*^9}},ExpressionUUID->"5008c691-77c8-405c-9fa7-\
+d9079d6fc9ce"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeKeyboardPressable", "[", "keyboard_List", "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"makeKeyPressable", "/@", "keyboard"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"makeKeyPressable", "[", "touchedKey_Mouseover", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"DynamicModule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"ymin", "=", 
+      RowBox[{"touchedKey", "[", 
+       RowBox[{"[", 
+        RowBox[{"2", ",", "3", ",", "1", ",", "2"}], "]"}], "]"}]}], "}"}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{"EventHandler", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"touchedKey", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"2", ",", "3", ",", "1", ",", "2"}], "}"}], "\[Rule]", 
+         RowBox[{"Dynamic", "@", "ymin"}]}]}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<MouseDown\>\"", "\[RuleDelayed]", 
+         RowBox[{"(", 
+          RowBox[{"ymin", "=", 
+           RowBox[{"ymin", "+", ".3"}]}], ")"}]}], ",", 
+        RowBox[{"\"\<MouseUp\>\"", "\[RuleDelayed]", 
+         RowBox[{"(", 
+          RowBox[{"ymin", "=", 
+           RowBox[{"touchedKey", "[", 
+            RowBox[{"[", 
+             RowBox[{"2", ",", "3", ",", "1", ",", "2"}], "]"}], "]"}]}], 
+          ")"}]}]}], "}"}]}], "]"}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.706532978873925*^9, 3.706533068047709*^9}, 
+   3.7065348197558928`*^9, 3.7065469211673183`*^9, {3.706547026423176*^9, 
+   3.706547029060054*^9}, 
+   3.706650239165567*^9},ExpressionUUID->"8e67e5a7-813c-4829-a217-\
+2e8e7fca18a6"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Making The Keyboard Touchable", "Subsection",
+ CellChangeTimes->{{3.7072510878151283`*^9, 
+  3.70725109484739*^9}},ExpressionUUID->"2e63e2ea-cea3-4f5b-968b-\
+d4d04c557766"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeKeyboardTouchable", "[", "keyboard_List", "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"makeKeyTouchable", "/@", "keyboard"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"makeKeyTouchable", "[", "key_List", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Mouseover", "[", 
+   RowBox[{"key", ",", 
+    RowBox[{"ReplacePart", "[", 
+     RowBox[{"key", ",", 
+      RowBox[{"{", 
+       RowBox[{"2", "\[Rule]", "Yellow"}], "}"}]}], "]"}]}], 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.706532650214425*^9, 3.706532685483431*^9}, {
+  3.706532718489111*^9, 3.706532751187852*^9}, {3.706532821062378*^9, 
+  3.706532825735119*^9}, {3.7065328814054623`*^9, 3.706532898409276*^9}, {
+  3.70654689711304*^9, 
+  3.706546919149564*^9}},ExpressionUUID->"fbfeda74-94ef-45ee-977c-\
+93100ed83a2c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Making The Keyboard Labelable", "Subsection",
+ CellChangeTimes->{{3.7072510982125463`*^9, 
+  3.7072511089027*^9}},ExpressionUUID->"6f699f01-4521-430b-b10b-bd279fa7586b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeKeyboardLabelable", "[", "keyboard_List", "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"nOctaves", "=", 
+       RowBox[{
+        RowBox[{"Length", "[", "keyboard", "]"}], "/", "12"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"MapThread", "[", 
+      RowBox[{"makeKeyLabelable", ",", 
+       RowBox[{"{", 
+        RowBox[{"keyboard", ",", 
+         RowBox[{"constructLabels", "[", "keyboard", "]"}]}], "}"}]}], 
+      "]"}]}], "]"}]}], "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{"makeKeyLabelable", "[", 
+   RowBox[{"key_List", ",", "label_String"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"color", "=", 
+       RowBox[{"key", "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], ",", 
+      RowBox[{"xMin", "=", 
+       RowBox[{"key", "[", 
+        RowBox[{"[", 
+         RowBox[{"3", ",", "1", ",", "1"}], "]"}], "]"}]}], ",", 
+      RowBox[{"yMin", "=", 
+       RowBox[{"key", "[", 
+        RowBox[{"[", 
+         RowBox[{"3", ",", "1", ",", "2"}], "]"}], "]"}]}], ",", 
+      RowBox[{"xMax", "=", 
+       RowBox[{"key", "[", 
+        RowBox[{"[", 
+         RowBox[{"3", ",", "2", ",", "1"}], "]"}], "]"}]}]}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Join", "[", 
+     RowBox[{"key", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"ColorNegate", "[", "color", "]"}], ",", 
+        RowBox[{"Text", "[", 
+         RowBox[{"label", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Mean", "[", 
+             RowBox[{"{", 
+              RowBox[{"xMin", ",", "xMax"}], "}"}], "]"}], ",", 
+            RowBox[{"yMin", "+", ".5"}]}], "}"}]}], "]"}]}], "}"}]}], "]"}]}],
+    "]"}]}]}], "Input",
+ CellChangeTimes->{{3.706531689960575*^9, 3.706531741516131*^9}, {
+   3.706531846460268*^9, 3.706531855097077*^9}, 3.706531889621984*^9, {
+   3.706532758043829*^9, 3.706532758530291*^9}, {3.706533759822806*^9, 
+   3.706533762199739*^9}, 
+   3.706550141642561*^9},ExpressionUUID->"781f828b-0d03-40d4-b284-\
+425016c803e7"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+All possible instruments (or musical styles) available in the Wolfram Language\
+\>", "Subsection",
+ CellChangeTimes->{{3.7072511250237093`*^9, 
+  3.707251164948481*^9}},ExpressionUUID->"79548661-9be2-4694-8a26-\
+ed36739cf8a7"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"instruments", "=", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<Accordion\>\"", ",", "\"\<Agogo\>\"", ",", "\"\<AltoSax\>\"", ",", 
+     "\"\<Applause\>\"", ",", "\"\<Atmosphere\>\"", ",", "\"\<Bagpipe\>\"", 
+     ",", "\"\<Bandoneon\>\"", ",", "\"\<Banjo\>\"", ",", 
+     "\"\<BaritoneSax\>\"", ",", "\"\<Bass\>\"", ",", "\"\<BassAndLead\>\"", 
+     ",", "\"\<Bassoon\>\"", ",", "\"\<Bird\>\"", ",", "\"\<BlownBottle\>\"", 
+     ",", "\"\<Bowed\>\"", ",", "\"\<BrassSection\>\"", ",", "\"\<Breath\>\"",
+      ",", "\"\<Brightness\>\"", ",", "\"\<BrightPiano\>\"", ",", 
+     "\"\<Calliope\>\"", ",", "\"\<Celesta\>\"", ",", "\"\<Cello\>\"", ",", 
+     "\"\<Charang\>\"", ",", "\"\<Chiff\>\"", ",", "\"\<Choir\>\"", ",", 
+     "\"\<Clarinet\>\"", ",", "\"\<Clavi\>\"", ",", "\"\<Contrabass\>\"", 
+     ",", "\"\<Crystal\>\"", ",", "\"\<DrawbarOrgan\>\"", ",", 
+     "\"\<Dulcimer\>\"", ",", "\"\<Echoes\>\"", ",", "\"\<ElectricBass\>\"", 
+     ",", "\"\<ElectricGrandPiano\>\"", ",", "\"\<ElectricGuitar\>\"", ",", 
+     "\"\<ElectricPiano\>\"", ",", "\"\<ElectricPiano2\>\"", ",", 
+     "\"\<EnglishHorn\>\"", ",", "\"\<Fiddle\>\"", ",", "\"\<Fifths\>\"", 
+     ",", "\"\<Flute\>\"", ",", "\"\<FrenchHorn\>\"", ",", 
+     "\"\<FretlessBass\>\"", ",", "\"\<FretNoise\>\"", ",", 
+     "\"\<Glockenspiel\>\"", ",", "\"\<Goblins\>\"", ",", "\"\<Guitar\>\"", 
+     ",", "\"\<GuitarDistorted\>\"", ",", "\"\<GuitarHarmonics\>\"", ",", 
+     "\"\<GuitarMuted\>\"", ",", "\"\<GuitarOverdriven\>\"", ",", 
+     "\"\<Gunshot\>\"", ",", "\"\<Halo\>\"", ",", "\"\<Harmonica\>\"", ",", 
+     "\"\<Harp\>\"", ",", "\"\<Harpsichord\>\"", ",", "\"\<Helicopter\>\"", 
+     ",", "\"\<HonkyTonkPiano\>\"", ",", "\"\<JazzGuitar\>\"", ",", 
+     "\"\<Kalimba\>\"", ",", "\"\<Koto\>\"", ",", "\"\<Marimba\>\"", ",", 
+     "\"\<MelodicTom\>\"", ",", "\"\<Metallic\>\"", ",", "\"\<MusicBox\>\"", 
+     ",", "\"\<MutedTrumpet\>\"", ",", "\"\<NewAge\>\"", ",", "\"\<Oboe\>\"", 
+     ",", "\"\<Ocarina\>\"", ",", "\"\<OrchestraHit\>\"", ",", 
+     "\"\<Organ\>\"", ",", "\"\<PanFlute\>\"", ",", "\"\<PercussiveOrgan\>\"",
+      ",", "\"\<Piano\>\"", ",", "\"\<Piccolo\>\"", ",", "\"\<PickedBass\>\"",
+      ",", "\"\<PizzicatoStrings\>\"", ",", "\"\<Polysynth\>\"", ",", 
+     "\"\<Rain\>\"", ",", "\"\<Recorder\>\"", ",", "\"\<ReedOrgan\>\"", ",", 
+     "\"\<ReverseCymbal\>\"", ",", "\"\<RockOrgan\>\"", ",", 
+     "\"\<Sawtooth\>\"", ",", "\"\<SciFi\>\"", ",", "\"\<Seashore\>\"", ",", 
+     "\"\<Shakuhachi\>\"", ",", "\"\<Shamisen\>\"", ",", "\"\<Shanai\>\"", 
+     ",", "\"\<Sitar\>\"", ",", "\"\<SlapBass\>\"", ",", "\"\<SlapBass2\>\"", 
+     ",", "\"\<SopranoSax\>\"", ",", "\"\<Soundtrack\>\"", ",", 
+     "\"\<Square\>\"", ",", "\"\<Steeldrums\>\"", ",", "\"\<SteelGuitar\>\"", 
+     ",", "\"\<Strings\>\"", ",", "\"\<Strings2\>\"", ",", "\"\<Sweep\>\"", 
+     ",", "\"\<SynthBass\>\"", ",", "\"\<SynthBass2\>\"", ",", 
+     "\"\<SynthBrass\>\"", ",", "\"\<SynthBrass2\>\"", ",", 
+     "\"\<SynthDrum\>\"", ",", "\"\<SynthStrings\>\"", ",", 
+     "\"\<SynthStrings2\>\"", ",", "\"\<SynthVoice\>\"", ",", "\"\<Taiko\>\"",
+      ",", "\"\<Telephone\>\"", ",", "\"\<TenorSax\>\"", ",", 
+     "\"\<Timpani\>\"", ",", "\"\<Tinklebell\>\"", ",", 
+     "\"\<TremoloStrings\>\"", ",", "\"\<Trombone\>\"", ",", 
+     "\"\<Trumpet\>\"", ",", "\"\<Tuba\>\"", ",", "\"\<TubularBells\>\"", 
+     ",", "\"\<Vibraphone\>\"", ",", "\"\<Viola\>\"", ",", "\"\<Violin\>\"", 
+     ",", "\"\<Voice\>\"", ",", "\"\<VoiceAahs\>\"", ",", "\"\<VoiceOohs\>\"",
+      ",", "\"\<Warm\>\"", ",", "\"\<Whistle\>\"", ",", "\"\<Woodblock\>\"", 
+     ",", "\"\<Xylophone\>\""}], "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{
+  3.706832440674727*^9},ExpressionUUID->"1aa072b4-fccf-4648-a451-\
+f4698415efab"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Putting It All Together (Start here if you just want to begin playing!) \
+\>", "Section",
+ CellChangeTimes->{{3.707251174563615*^9, 3.707251200331046*^9}, {
+  3.707251240289979*^9, 
+  3.7072512712399483`*^9}},ExpressionUUID->"4e9c564b-b6a4-4c69-80e4-\
+365d7b390de0"],
+
+Cell["\<\
+Don\[CloseCurlyQuote]t forget to evaluate all prior cells, and then just \
+click on the keys to begin producing music.\
+\>", "Text",
+ CellChangeTimes->{{3.707251399418398*^9, 
+  3.707251437769205*^9}},ExpressionUUID->"e98b5636-29d2-4f85-9548-\
+000cab6fdc9a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Graphics", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"makeKeyboardPlayable", "[", 
+      RowBox[{
+       RowBox[{"constructKeyboard", "[", "nOctaves", "]"}], ",", "labeledQ", 
+       ",", "instrument"}], "]"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"ImageSize", "\[Rule]", "Full"}]}], "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"nOctaves", ",", "3", ",", "\"\<Number Of Octaves\>\""}], "}"}],
+      ",", 
+     RowBox[{"Range", "[", "7", "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"labeledQ", ",", "False", ",", "\"\<Show Labels\>\""}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"True", ",", "False"}], "}"}]}], "}"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"instrument", ",", "\"\<Piano\>\"", ",", "\"\<Instrument\>\""}],
+       "}"}], ",", "instruments"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.7065461977872458`*^9, {3.706546284759857*^9, 3.7065463194472637`*^9}, {
+   3.706546366906303*^9, 3.706546377045946*^9}, {3.706547650844223*^9, 
+   3.706547705798917*^9}, {3.706547741823204*^9, 3.706547758733823*^9}, 
+   3.706547819646549*^9, {3.706547851286665*^9, 3.706547890371851*^9}, {
+   3.706547925270381*^9, 3.706547939038109*^9}, {3.7065487369596453`*^9, 
+   3.7065487596124077`*^9}, {3.706550574676732*^9, 3.706550598188035*^9}, {
+   3.706550673883754*^9, 3.706550678747137*^9}, {3.70655075190662*^9, 
+   3.7065507543692617`*^9}, {3.706551457843927*^9, 3.706551468350685*^9}, 
+   3.7065515062684927`*^9, 3.706551655776885*^9, {3.706557093547244*^9, 
+   3.7065571374338217`*^9}, 3.706558916362267*^9, 3.706603706858111*^9, 
+   3.706650265545191*^9},ExpressionUUID->"539414ff-8c69-41fa-8d2a-\
+39e978948055"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`instrument$$ = 
+    "Piano", $CellContext`labeledQ$$ = False, $CellContext`nOctaves$$ = 3, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`nOctaves$$], 3, "Number Of Octaves"}, {1, 2, 3, 4, 5,
+       6, 7}}, {{
+       Hold[$CellContext`labeledQ$$], False, "Show Labels"}, {True, False}}, {{
+       Hold[$CellContext`instrument$$], "Piano", "Instrument"}, {
+      "Accordion", "Agogo", "AltoSax", "Applause", "Atmosphere", "Bagpipe", 
+       "Bandoneon", "Banjo", "BaritoneSax", "Bass", "BassAndLead", "Bassoon", 
+       "Bird", "BlownBottle", "Bowed", "BrassSection", "Breath", "Brightness",
+        "BrightPiano", "Calliope", "Celesta", "Cello", "Charang", "Chiff", 
+       "Choir", "Clarinet", "Clavi", "Contrabass", "Crystal", "DrawbarOrgan", 
+       "Dulcimer", "Echoes", "ElectricBass", "ElectricGrandPiano", 
+       "ElectricGuitar", "ElectricPiano", "ElectricPiano2", "EnglishHorn", 
+       "Fiddle", "Fifths", "Flute", "FrenchHorn", "FretlessBass", "FretNoise",
+        "Glockenspiel", "Goblins", "Guitar", "GuitarDistorted", 
+       "GuitarHarmonics", "GuitarMuted", "GuitarOverdriven", "Gunshot", 
+       "Halo", "Harmonica", "Harp", "Harpsichord", "Helicopter", 
+       "HonkyTonkPiano", "JazzGuitar", "Kalimba", "Koto", "Marimba", 
+       "MelodicTom", "Metallic", "MusicBox", "MutedTrumpet", "NewAge", "Oboe",
+        "Ocarina", "OrchestraHit", "Organ", "PanFlute", "PercussiveOrgan", 
+       "Piano", "Piccolo", "PickedBass", "PizzicatoStrings", "Polysynth", 
+       "Rain", "Recorder", "ReedOrgan", "ReverseCymbal", "RockOrgan", 
+       "Sawtooth", "SciFi", "Seashore", "Shakuhachi", "Shamisen", "Shanai", 
+       "Sitar", "SlapBass", "SlapBass2", "SopranoSax", "Soundtrack", "Square",
+        "Steeldrums", "SteelGuitar", "Strings", "Strings2", "Sweep", 
+       "SynthBass", "SynthBass2", "SynthBrass", "SynthBrass2", "SynthDrum", 
+       "SynthStrings", "SynthStrings2", "SynthVoice", "Taiko", "Telephone", 
+       "TenorSax", "Timpani", "Tinklebell", "TremoloStrings", "Trombone", 
+       "Trumpet", "Tuba", "TubularBells", "Vibraphone", "Viola", "Violin", 
+       "Voice", "VoiceAahs", "VoiceOohs", "Warm", "Whistle", "Woodblock", 
+       "Xylophone"}}}, Typeset`size$$ = {1101., {120., 124.}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    True, $CellContext`nOctaves$18267$$ = 0, $CellContext`labeledQ$18268$$ = 
+    False, $CellContext`instrument$18269$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`instrument$$ = 
+        "Piano", $CellContext`labeledQ$$ = False, $CellContext`nOctaves$$ = 
+        3}, "ControllerVariables" :> {
+        Hold[$CellContext`nOctaves$$, $CellContext`nOctaves$18267$$, 0], 
+        Hold[$CellContext`labeledQ$$, $CellContext`labeledQ$18268$$, False], 
+        Hold[$CellContext`instrument$$, $CellContext`instrument$18269$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Graphics[
+        $CellContext`makeKeyboardPlayable[
+         $CellContext`constructKeyboard[$CellContext`nOctaves$$], \
+$CellContext`labeledQ$$, $CellContext`instrument$$], ImageSize -> Full], 
+      "Specifications" :> {{{$CellContext`nOctaves$$, 3, 
+          "Number Of Octaves"}, {1, 2, 3, 4, 5, 6, 
+         7}}, {{$CellContext`labeledQ$$, False, "Show Labels"}, {
+         True, False}}, {{$CellContext`instrument$$, "Piano", "Instrument"}, {
+         "Accordion", "Agogo", "AltoSax", "Applause", "Atmosphere", "Bagpipe",
+           "Bandoneon", "Banjo", "BaritoneSax", "Bass", "BassAndLead", 
+          "Bassoon", "Bird", "BlownBottle", "Bowed", "BrassSection", "Breath",
+           "Brightness", "BrightPiano", "Calliope", "Celesta", "Cello", 
+          "Charang", "Chiff", "Choir", "Clarinet", "Clavi", "Contrabass", 
+          "Crystal", "DrawbarOrgan", "Dulcimer", "Echoes", "ElectricBass", 
+          "ElectricGrandPiano", "ElectricGuitar", "ElectricPiano", 
+          "ElectricPiano2", "EnglishHorn", "Fiddle", "Fifths", "Flute", 
+          "FrenchHorn", "FretlessBass", "FretNoise", "Glockenspiel", 
+          "Goblins", "Guitar", "GuitarDistorted", "GuitarHarmonics", 
+          "GuitarMuted", "GuitarOverdriven", "Gunshot", "Halo", "Harmonica", 
+          "Harp", "Harpsichord", "Helicopter", "HonkyTonkPiano", "JazzGuitar",
+           "Kalimba", "Koto", "Marimba", "MelodicTom", "Metallic", "MusicBox",
+           "MutedTrumpet", "NewAge", "Oboe", "Ocarina", "OrchestraHit", 
+          "Organ", "PanFlute", "PercussiveOrgan", "Piano", "Piccolo", 
+          "PickedBass", "PizzicatoStrings", "Polysynth", "Rain", "Recorder", 
+          "ReedOrgan", "ReverseCymbal", "RockOrgan", "Sawtooth", "SciFi", 
+          "Seashore", "Shakuhachi", "Shamisen", "Shanai", "Sitar", "SlapBass",
+           "SlapBass2", "SopranoSax", "Soundtrack", "Square", "Steeldrums", 
+          "SteelGuitar", "Strings", "Strings2", "Sweep", "SynthBass", 
+          "SynthBass2", "SynthBrass", "SynthBrass2", "SynthDrum", 
+          "SynthStrings", "SynthStrings2", "SynthVoice", "Taiko", "Telephone",
+           "TenorSax", "Timpani", "Tinklebell", "TremoloStrings", "Trombone", 
+          "Trumpet", "Tuba", "TubularBells", "Vibraphone", "Viola", "Violin", 
+          "Voice", "VoiceAahs", "VoiceOohs", "Warm", "Whistle", "Woodblock", 
+          "Xylophone"}}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{1146., {189., 195.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.7066502670179787`*^9, {3.706827512266427*^9, 3.706827537279971*^9}, 
+   3.706827670841188*^9, 3.7068324142709503`*^9, 3.706882272314825*^9, 
+   3.7072509097561274`*^9},ExpressionUUID->"06ccbe5a-cb36-49a1-9d93-\
+002f12a1a5a3"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+},
+WindowSize->{1280, 751},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+SpellingDictionaries->{"CorrectWords"->{"Labelable"}},
+FrontEndVersion->"11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 27, \
+2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 212, 4, 92, "Title", "ExpressionUUID" -> \
+"9ed598d9-4f1f-4988-b709-cefdcd309afb"],
+Cell[795, 28, 406, 10, 68, "Text", "ExpressionUUID" -> \
+"fb9c684d-d325-4221-b47e-e215324aae0c"],
+Cell[CellGroupData[{
+Cell[1226, 42, 239, 4, 64, "Section", "ExpressionUUID" -> \
+"9a7ce3b0-bc97-49a1-b711-78a34727c9b2"],
+Cell[1468, 48, 4131, 103, 453, "Input", "ExpressionUUID" -> \
+"b5e4c031-a28a-432a-82e0-391edbe95d7a"],
+Cell[CellGroupData[{
+Cell[5624, 155, 218, 4, 44, "Subsection", "ExpressionUUID" -> \
+"1c0b13cf-54b5-45f9-bf16-e19677255173"],
+Cell[5845, 161, 1065, 23, 75, "Input", "ExpressionUUID" -> \
+"fb23e546-176d-4a0d-925b-b4429800798e"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6959, 190, 270, 4, 50, "Section", "ExpressionUUID" -> \
+"4f28462f-ae39-4a75-a8c7-9bd36431463d"],
+Cell[7232, 196, 349, 7, 49, "Text", "ExpressionUUID" -> \
+"e683494e-d11c-4e95-b8b3-6dddcfc00bcf"],
+Cell[7584, 205, 4857, 129, 432, "Input", "ExpressionUUID" -> \
+"e788b66e-8c14-4a64-b852-65102619d3a1"],
+Cell[CellGroupData[{
+Cell[12466, 338, 218, 4, 35, "Subsubsection", "ExpressionUUID" -> \
+"78a1ad6f-3db2-4103-b6ad-9e7b37f907ba"],
+Cell[12687, 344, 1248, 24, 75, "Input", "ExpressionUUID" -> \
+"0f64be88-8754-40de-a65e-990ece0e9def"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13984, 374, 234, 4, 50, "Section", "ExpressionUUID" -> \
+"4ece6db4-97e2-402c-ba4b-2ff8d728719f"],
+Cell[CellGroupData[{
+Cell[14243, 382, 227, 4, 44, "Subsection", "ExpressionUUID" -> \
+"681a920d-318b-465b-81f4-912d4c352c71"],
+Cell[14473, 388, 840, 17, 138, "Input", "ExpressionUUID" -> \
+"e8b9d81d-e94e-4927-84c8-5e62df77bfa8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15350, 410, 177, 3, 44, "Subsection", "ExpressionUUID" -> \
+"39a5c4a2-7724-4696-8b8a-1d8247d811ad"],
+Cell[15530, 415, 1811, 38, 159, "Input", "ExpressionUUID" -> \
+"9f08893f-9e7b-4697-98bb-6b29180f5898"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17378, 458, 179, 3, 44, "Subsection", "ExpressionUUID" -> \
+"5008c691-77c8-405c-9fa7-d9079d6fc9ce"],
+Cell[17560, 463, 1711, 44, 180, "Input", "ExpressionUUID" -> \
+"8e67e5a7-813c-4829-a217-2e8e7fca18a6"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19308, 512, 178, 3, 44, "Subsection", "ExpressionUUID" -> \
+"2e63e2ea-cea3-4f5b-968b-d4d04c557766"],
+Cell[19489, 517, 873, 22, 117, "Input", "ExpressionUUID" -> \
+"fbfeda74-94ef-45ee-977c-93100ed83a2c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20399, 544, 175, 2, 44, "Subsection", "ExpressionUUID" -> \
+"6f699f01-4521-430b-b10b-bd279fa7586b"],
+Cell[20577, 548, 2177, 61, 159, "Input", "ExpressionUUID" -> \
+"781f828b-0d03-40d4-b284-425016c803e7"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22791, 614, 236, 5, 44, "Subsection", "ExpressionUUID" -> \
+"79548661-9be2-4694-8a26-ed36739cf8a7"],
+Cell[23030, 621, 3810, 57, 306, "Input", "ExpressionUUID" -> \
+"1aa072b4-fccf-4648-a451-f4698415efab"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[26889, 684, 276, 6, 50, "Section", "ExpressionUUID" -> \
+"4e9c564b-b6a4-4c69-80e4-365d7b390de0"],
+Cell[27168, 692, 268, 6, 30, "Text", "ExpressionUUID" -> \
+"e98b5636-29d2-4f85-9548-000cab6fdc9a"],
+Cell[CellGroupData[{
+Cell[27461, 702, 1920, 42, 159, "Input", "ExpressionUUID" -> \
+"539414ff-8c69-41fa-8d2a-39e978948055"],
+Cell[29384, 746, 6484, 101, 401, "Output", "ExpressionUUID" -> \
+"06ccbe5a-cb36-49a1-9d93-002f12a1a5a3"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
